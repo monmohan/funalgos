@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 	"text/scanner"
+	"time"
 )
 
 func main() {
@@ -23,7 +24,10 @@ func main() {
 	//findPathWStack(root, "sty")*/
 
 	graph := make(map[string][]string)
+	//print time taken to build graph
+	start := time.Now()
 	buildGraph(graph)
+	fmt.Println("Time taken to build graph", time.Since(start))
 	//printEdges(graph)
 	findPathbfs(graph, "head", "tail")
 	findPathbfs(graph, "pig", "sty")
@@ -42,7 +46,7 @@ type Node struct {
 func loadDict() {
 	//create scanner from file
 	var s scanner.Scanner
-	file := "/Users/singhmo/code/golang/src/github.com/monmohan/csprimer/algo/wordl/word-ladder/words.txt"
+	file := "/Users/singhmo/code/golang/src/github.com/monmohan/funalgos/algo/wordl/word-ladder/words.txt"
 	//reader of file
 	osFile, err := os.Open(file)
 	if err != nil {
