@@ -13,6 +13,17 @@ type Node struct {
 	jugs []jug
 }
 
+func (n *Node) String() string {
+	var s string
+	for _, j := range n.jugs {
+		s += fmt.Sprintf("%d/%d/", j.capacity, j.current)
+	}
+	return s
+
+}
+
+type State string
+
 func (n *Node) fillJug(index int) *Node {
 	if n.jugs[index].current == n.jugs[index].capacity {
 		return n
@@ -62,20 +73,20 @@ func main() {
 
 	fmt.Println(n, n1, n2)*/
 	start := &Node{jugs: []jug{{5, 0}, {3, 0}}}
-	findPath(start, 4)
+	findPath(start, 1)
 
 }
 
 func findPath(start *Node, capacity int) *Node {
 	q := []*Node{start}
-	visited := make(map[*Node]bool)
+	visited := make(map[string]bool)
 	printQ := 2
 	path := make(map[*Node]*Node)
 	for len(q) > 0 {
 
 		n := q[0]
 		q = q[1:]
-		visited[n] = true
+		visited[n.String()] = true
 		for i := 0; i < len(n.jugs); i++ {
 			if n.jugs[i].current == capacity {
 				//print path
@@ -90,20 +101,20 @@ func findPath(start *Node, capacity int) *Node {
 		//all fill children
 		for i := 0; i < len(n.jugs); i++ {
 			c1 := n.fillJug(i)
-			if _, ok := visited[c1]; !ok {
+			if _, ok := visited[c1.String()]; !ok {
 				q = append(q, c1)
 				path[c1] = n
-				visited[c1] = true
+				visited[c1.String()] = true
 			}
 		}
 
 		//all empty children
 		for i := 0; i < len(n.jugs); i++ {
 			c1 := n.emptyJug(i)
-			if _, ok := visited[c1]; !ok {
+			if _, ok := visited[c1.String()]; !ok {
 				q = append(q, c1)
 				path[c1] = n
-				visited[c1] = true
+				visited[c1.String()] = true
 			}
 		}
 		//all transfer children
@@ -111,10 +122,10 @@ func findPath(start *Node, capacity int) *Node {
 			for j := 0; j < len(n.jugs); j++ {
 				if i != j {
 					c1 := n.transferJug(i, j)
-					if _, ok := visited[c1]; !ok {
+					if _, ok := visited[c1.String()]; !ok {
 						q = append(q, c1)
 						path[c1] = n
-						visited[c1] = true
+						visited[c1.String()] = true
 					}
 				}
 			}
